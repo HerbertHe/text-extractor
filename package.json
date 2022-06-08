@@ -1,8 +1,10 @@
 {
-  "name": "text-extractor",
-  "version": "1.0.0",
+  "name": "@herberthe/text-extractor",
+  "version": "0.0.1",
   "description": "Text Extractor for nodejs",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",

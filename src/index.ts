@@ -95,6 +95,6 @@ export class Extractor {
             custom: this._custom,
         })
 
-        return res.output()
+        return res.output() as IFile[]
     }
 }

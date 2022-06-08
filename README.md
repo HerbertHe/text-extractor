@@ -1,3 +1,7 @@
-# text-extractor
+# Text Extractor
 
-(WIP) Text Extractor for nodejs
+Text Extractor for nodejs
+
+## LICENSE
+
+MIT
