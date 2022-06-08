@@ -8,7 +8,7 @@ export interface IOptions extends IFilesTreeOptions {
 }
 
 export interface IFilesTreeOptions {
-	entry: string
+	entry: string | string[]
 	depth?: number
 	filter?: RegExp | FilterFunctionType
 }
