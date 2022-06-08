@@ -21,6 +21,6 @@
     "vitest": "^0.14.1"
   },
   "dependencies": {
-    "@herberthe/filestree": "^1.2.2"
+    "@herberthe/filestree": "^1.3.1"
   }
 }
