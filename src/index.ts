@@ -19,14 +19,26 @@ export class Extractor {
             ...opts,
         }
 
+        // import presets
         if (!!opts.presets && opts.presets.length > 0) {
             opts.presets.forEach(p => {
                 if (!!Presets[p]) {
-                    if (/^no-([a-zA-Z0-9\-]+)$/.test(p)) {
-                        this._banned_rules.set(p, Presets[p])
+                    if (/^no-([a-zA-Z0-9\-]+)$/.test(<string>p)) {
+                        this._banned_rules.set(<string>p, Presets[p])
                     } else {
-                        this._allowed_rules.set(p, Presets[p])
+                        this._allowed_rules.set(<string>p, Presets[p])
                     }
+                }
+            })
+        }
+
+        // support custom rules
+        if (!!opts.rules && opts.rules.size > 0) {
+            opts.rules.forEach((v, k) => {
+                if (/^no-([a-zA-Z0-9\-]+)$/.test(k)) {
+                    this._banned_rules.set(k, v)
+                } else {
+                    this._allowed_rules.set(k, v)
                 }
             })
         }

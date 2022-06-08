@@ -1,8 +1,10 @@
+import { PresetsType } from "./presets"
+
 type FilterFunctionType = (filename: string) => boolean
 
 export interface IOptions extends IFilesTreeOptions {
-	presets?: string[]
-	regexps?: Record<string, RegExp>
+	presets?: PresetsType[]
+	rules?: Map<string, RegExp>
 }
 
 export interface IFilesTreeOptions {
@@ -10,9 +12,6 @@ export interface IFilesTreeOptions {
 	depth?: number
 	filter?: RegExp | FilterFunctionType
 }
-
-// TODO 支持 presets 对于固定格式进行提取
-// TODO 支持自定义正则表达式提取
 
 /**
  * IFile
