@@ -2,7 +2,7 @@ type FilterFunctionType = (filename: string) => boolean
 
 export interface IOptions extends IFilesTreeOptions {
 	presets?: string[]
-	regexps?: RegExp[]
+	regexps?: Record<string, RegExp>
 }
 
 export interface IFilesTreeOptions {
@@ -20,17 +20,15 @@ export interface IFilesTreeOptions {
 export interface IFile {
 	filename: string
 	path: string
+	files: IFile[]
 	texts: IText[]
 }
 
 /**
  * IText
- * @param {string} row row
- * @param {[number, number]} pos position - [start, end]
- * @param {string} content text content
  */
 export interface IText {
-	row: string
-	pos: [number, number]
+	idx: number
+	offset: number
 	content: string
 }

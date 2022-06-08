@@ -1,14 +1,19 @@
 {
   "name": "text-extractor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Text Extractor for nodejs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "tsup --watch",
+    "build": "tsup",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "Text Extractor"
+  ],
+  "author": "Herbert He<Herbert.He0229@gmail.com>",
+  "license": "MIT",
   "devDependencies": {
     "@types/node": "^17.0.40",
     "tsup": "^6.1.0",
@@ -16,6 +21,6 @@
     "vitest": "^0.14.1"
   },
   "dependencies": {
-    "@herberthe/filestree": "^1.1.0"
+    "@herberthe/filestree": "^1.2.2"
   }
 }

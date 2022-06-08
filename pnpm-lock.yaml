@@ -1,14 +1,14 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@herberthe/filestree': ^1.1.0
+  '@herberthe/filestree': ^1.2.2
   '@types/node': ^17.0.40
   tsup: ^6.1.0
   typescript: ^4.7.3
   vitest: ^0.14.1
 
 dependencies:
-  '@herberthe/filestree': 1.1.0
+  '@herberthe/filestree': 1.2.2
 
 devDependencies:
   '@types/node': 17.0.40
@@ -18,8 +18,8 @@ devDependencies:
 
 packages:
 
-  /@herberthe/filestree/1.1.0:
-    resolution: {integrity: sha512-G23UJsRsfNTkbuxxzm0J0D9f5VvveXFB2wcfUGAAdaqRKows3OSgIMNR3pnCOsD59XQLgCxu1RAE/z494Yl60A==}
+  /@herberthe/filestree/1.2.2:
+    resolution: {integrity: sha512-Ep1fRw73r3/byT9bP94kLTGtxRfndJjY47J9y16/X4D7DB0D7Ti87NbkYaQ3bb5gPjYzBTjEi5kJKMn76z2YFg==}
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:
