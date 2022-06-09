@@ -1,6 +1,6 @@
 {
   "name": "@herberthe/text-extractor",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Text Extractor for nodejs",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -2,7 +2,7 @@ import { FilesTree } from "@herberthe/filestree"
 import { lstatSync, readdirSync, readFileSync, Stats } from "fs"
 import { join } from "path"
 import { Presets } from "./presets"
-import { IOptions, IText, IFile } from "./types"
+import { IOptions, IFile, ISpecificRule } from "./types"
 
 export class Extractor {
     private _options: IOptions = {
@@ -10,8 +10,11 @@ export class Extractor {
         depth: Infinity,
     }
 
-    private _allowed_rules: Map<string, RegExp> = new Map()
-    private _banned_rules: Map<string, RegExp> = new Map()
+    // Global rules
+    private _allowed_rules_global: Map<string, RegExp> = new Map()
+    private _banned_rules_global: Map<string, RegExp> = new Map()
+
+    private _rules_specific: ISpecificRule[] = []
 
     constructor(opts: IOptions) {
         this._options = {
@@ -19,28 +22,35 @@ export class Extractor {
             ...opts,
         }
 
+        const { presets, rules } = opts
+
         // import presets
-        if (!!opts.presets && opts.presets.length > 0) {
-            opts.presets.forEach(p => {
+        if (!!presets && presets.length > 0) {
+            presets.forEach(p => {
                 if (!!Presets[p]) {
                     if (/^no-([a-zA-Z0-9\-]+)$/.test(<string>p)) {
-                        this._banned_rules.set(<string>p, Presets[p])
+                        this._banned_rules_global.set(<string>p, Presets[p])
                     } else {
-                        this._allowed_rules.set(<string>p, Presets[p])
+                        this._allowed_rules_global.set(<string>p, Presets[p])
                     }
                 }
             })
         }
 
-        // support custom rules
-        if (!!opts.rules && opts.rules.size > 0) {
-            opts.rules.forEach((v, k) => {
+        // support custom global rules
+        if (!!rules && rules instanceof Map && rules.size > 0) {
+            rules.forEach((v, k) => {
                 if (/^no-([a-zA-Z0-9\-]+)$/.test(k)) {
-                    this._banned_rules.set(k, v)
+                    this._banned_rules_global.set(k, v)
                 } else {
-                    this._allowed_rules.set(k, v)
+                    this._allowed_rules_global.set(k, v)
                 }
             })
+        }
+
+        // support custom specific rules
+        if (!!rules && Array.isArray(rules) && rules.length > 0) {
+            this._rules_specific = rules
         }
     }
 
@@ -63,20 +73,55 @@ export class Extractor {
             return file
         } else {
             const raw = readFileSync(path, "utf8")
-            let t: IText[] = []
 
-            this._allowed_rules.forEach((v) => {
-                const tmp = raw.matchAll(v)
-                t = [...t, ...Array.from(tmp).map((v) => {
-                    return {
-                        content: v[0],
-                        idx: v.index,
-                        offset: v[0].length
+            if (!!this._rules_specific && this._rules_specific.length > 0) {
+                this._rules_specific.forEach((rule) => {
+                    const { test, rules } = rule
+                    if (!!test && test.test(filename)) {
+                        rules[0].forEach(r => {
+                            const tmp = raw.matchAll(r)
+                            Array.from(tmp).forEach(v => {
+                                if (!Array.from(rule[1] as ISpecificRule["rules"][1]).some((r) => r.test(v[0]))) {
+                                    file.texts.push({
+                                        content: v[0],
+                                        idx: v.index,
+                                        offset: v[0].length
+                                    })
+                                }
+                            })
+                        })
+                    } else {
+                        this._allowed_rules_global.forEach((v) => {
+                            const tmp = raw.matchAll(v)
+                            Array.from(tmp).forEach(v => {
+                                if (!Array.from(this._banned_rules_global.values()).some((r) => r.test(v[0]))) {
+                                    file.texts.push({
+                                        content: v[0],
+                                        idx: v.index,
+                                        offset: v[0].length
+                                    })
+                                }
+                            })
+                        })
                     }
-                })]
-            })
-
-            file.texts.push(...t.filter(({ content }) => !Array.from(this._banned_rules.values()).some((v) => v.test(content))))
+                })
+            } else {
+                this._allowed_rules_global.forEach((v) => {
+                    const tmp = raw.matchAll(v)
+                    this._allowed_rules_global.forEach((v) => {
+                        const tmp = raw.matchAll(v)
+                        Array.from(tmp).forEach(v => {
+                            if (!Array.from(this._banned_rules_global.values()).some((r) => r.test(v[0]))) {
+                                file.texts.push({
+                                    content: v[0],
+                                    idx: v.index,
+                                    offset: v[0].length
+                                })
+                            }
+                        })
+                    })
+                })
+            }
 
             return file
         }

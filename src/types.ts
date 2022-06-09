@@ -2,9 +2,14 @@ import { PresetsType } from "./presets"
 
 type FilterFunctionType = (filename: string) => boolean
 
+export interface ISpecificRule {
+	test: RegExp
+	rules: [RegExp[], RegExp[]]
+}
+
 export interface IOptions extends IFilesTreeOptions {
 	presets?: PresetsType[]
-	rules?: Map<string, RegExp>
+	rules?: Map<string, RegExp> | ISpecificRule[]
 }
 
 export interface IFilesTreeOptions {
